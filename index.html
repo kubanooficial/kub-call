@@ -2,522 +2,680 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-    <meta name="description" content="Directorio telefónico de Cuba basado en datos de ETECSA. Generador de contactos con teléfonos fijos y móviles reales por provincia.">
-    <meta name="keywords" content="ETECSA, Cuba, directorio telefónico, teléfonos cubanos, Cubacel, contactos">
-    <meta name="author" content="OWE">
-    <meta name="robots" content="noindex, nofollow">
-    <meta name="theme-color" content="#0056b3">
-    <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <meta http-equiv="X-Frame-Options" content="DENY">
-    <meta http-equiv="Referrer-Policy" content="no-referrer">
-    <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src data:;">
-    <meta property="og:title" content="Contactos | CU - Directorio ETECSA">
-    <meta property="og:description" content="Directorio telefónico de Cuba basado en datos de ETECSA.">
-    <meta property="og:type" content="website">
-    <meta property="og:locale" content="es_CU">
-    <title>Contactos | CU</title>
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%230056b3'/%3E%3Cpath d='M20 18c0-2 2-4 4-4h16c2 0 4 2 4 4v28c0 2-2 4-4 4H24c-2 0-4-2-4-4V18z' fill='%23fff'/%3E%3Ccircle cx='32' cy='44' r='3' fill='%230056b3'/%3E%3Crect x='27' y='17' width='10' height='2' rx='1' fill='%230056b3'/%3E%3C/svg%3E">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0f62fe">
+    <meta name="description" content="KUB-CALL - Directorio de contactos CU">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="KUB-CALL">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>KUB-CALL</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230f62fe'/><text x='50' y='75' font-size='70' text-anchor='middle' fill='white' font-family='Arial' font-weight='bold'>KC</text></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230f62fe'/><text x='50' y='75' font-size='70' text-anchor='middle' fill='white' font-family='Arial' font-weight='bold'>KC</text></svg>">
+    <link rel="manifest" id="manifest-link">
     <style>
         :root {
-            --primary: #0056b3;
-            --primary-dark: #003d80;
-            --secondary: #007bff;
-            --accent: #00c853;
-            --bg: #eef2f7;
-            --card: #ffffff;
-            --text: #2c3e50;
-            --text-light: #6c757d;
-            --border: #dee2e6;
-            --shadow: 0 4px 12px rgba(0,0,0,0.08);
-            --radius: 10px;
+            --primary: #0f62fe;
+            --primary-dark: #0043ce;
+            --bg: #f4f4f4;
+            --surface: #ffffff;
+            --text: #161616;
+            --text-secondary: #525252;
+            --border: #e0e0e0;
+            --shadow: 0 2px 6px rgba(0,0,0,0.1);
+            --radius: 8px;
         }
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-        html {
-            font-size: 16px;
-            scroll-behavior: smooth;
-        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background-color: var(--bg);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
             color: var(--text);
             min-height: 100vh;
-            padding: 16px;
-            line-height: 1.5;
-        }
-        .container {
-            max-width: 1280px;
-            margin: 0 auto;
-            width: 100%;
-        }
-        header {
-            text-align: center;
-            margin-bottom: 28px;
-            padding: 20px 0;
-        }
-        .logo-wrapper {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 14px;
-            flex-wrap: wrap;
-        }
-        .logo-wrapper svg {
-            width: 56px;
-            height: 56px;
-            flex-shrink: 0;
-        }
-        header h1 {
-            color: var(--primary);
-            font-size: clamp(1.6rem, 4vw, 2.6rem);
-            letter-spacing: -0.5px;
-        }
-        header h2 {
-            color: var(--text-light);
-            font-weight: 400;
-            font-size: clamp(0.85rem, 2vw, 1.15rem);
-            margin-top: 4px;
-        }
-        .search-panel {
-            background: var(--card);
-            padding: 24px;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            margin-bottom: 20px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 18px;
-            align-items: end;
-        }
-        .form-group {
             display: flex;
             flex-direction: column;
         }
-        .form-group label {
-            margin-bottom: 6px;
-            font-weight: 600;
-            font-size: 0.85rem;
-            color: var(--text-light);
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-        }
-        .form-group input,
-        .form-group select {
-            padding: 10px 12px;
-            border: 2px solid var(--border);
-            border-radius: 6px;
-            font-size: 0.95rem;
-            transition: border-color 0.2s, box-shadow 0.2s;
-            background: #fff;
-            color: var(--text);
-            width: 100%;
-        }
-        .form-group input:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: var(--secondary);
-            box-shadow: 0 0 0 3px rgba(0,123,255,0.15);
-        }
-        .radio-group {
-            display: flex;
-            gap: 12px;
-            padding-top: 6px;
-            flex-wrap: wrap;
-        }
-        .radio-group label {
+
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 1rem 1.5rem;
+            box-shadow: var(--shadow);
             display: flex;
             align-items: center;
-            gap: 5px;
-            font-weight: 400;
-            font-size: 0.9rem;
-            cursor: pointer;
-            text-transform: none;
-            letter-spacing: 0;
-            color: var(--text);
-            white-space: nowrap;
+            gap: 0.75rem;
         }
-        .radio-group input[type="radio"] {
-            accent-color: var(--primary);
-            width: 16px;
-            height: 16px;
+
+        .logo {
+            width: 48px;
+            height: 48px;
+            background: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: var(--primary);
+            font-size: 1.5rem;
+            flex-shrink: 0;
         }
-        .btn {
-            padding: 12px 28px;
-            background-color: var(--primary);
-            color: #fff;
-            border: none;
-            border-radius: 6px;
-            font-size: 0.95rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: background 0.2s, transform 0.1s;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+
+        .logo svg {
+            width: 32px;
+            height: 32px;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .subtitle {
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+
+        main {
+            flex: 1;
+            padding: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
             width: 100%;
         }
-        .btn:hover {
-            background-color: var(--primary-dark);
-        }
-        .btn:active {
-            transform: scale(0.97);
-        }
-        .btn-success {
-            background-color: var(--accent);
-            color: #fff;
-        }
-        .btn-success:hover {
-            background-color: #00a844;
-        }
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-            gap: 14px;
-            margin-bottom: 20px;
-        }
-        .stat-card {
-            background: var(--card);
-            padding: 18px 14px;
+
+        .card {
+            background: var(--surface);
             border-radius: var(--radius);
+            padding: 1.5rem;
             box-shadow: var(--shadow);
-            text-align: center;
-            border-top: 3px solid var(--primary);
+            margin-bottom: 1.5rem;
         }
-        .stat-card h3 {
-            font-size: 0.8rem;
-            color: var(--text-light);
+
+        .card-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            margin-bottom: 4px;
         }
-        .stat-card p {
-            font-size: clamp(1.4rem, 3vw, 2rem);
-            font-weight: 800;
+
+        .filters {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .filter-group label {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.25rem;
+            font-weight: 500;
+        }
+
+        .filter-group select,
+        .filter-group input {
+            width: 100%;
+            padding: 0.6rem 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.95rem;
+            background: white;
+            color: var(--text);
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .filter-group select:focus,
+        .filter-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(15, 98, 254, 0.15);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 1rem;
+            background: var(--bg);
+            border-radius: 6px;
+        }
+
+        .stat-value {
+            font-size: 1.75rem;
+            font-weight: 700;
             color: var(--primary);
         }
-        .table-container {
-            background: var(--card);
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            overflow-x: auto;
-            margin-bottom: 20px;
-            -webkit-overflow-scrolling: touch;
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
+
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
-            min-width: 600px;
-        }
-        th, td {
-            padding: 14px 16px;
-            text-align: left;
-            border-bottom: 1px solid var(--border);
-            font-size: 0.9rem;
-        }
-        th {
-            background-color: #f8f9fb;
-            font-weight: 700;
-            color: var(--text-light);
-            text-transform: uppercase;
-            font-size: 0.78rem;
-            letter-spacing: 0.5px;
-            position: sticky;
-            top: 0;
-            z-index: 1;
-        }
-        tr:hover td {
-            background-color: #f0f6ff;
-        }
-        .actions {
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-        .actions .btn {
-            width: auto;
-        }
-        .empty-state {
-            text-align: center;
-            padding: 48px 20px;
-            color: var(--text-light);
-            font-style: italic;
             font-size: 0.95rem;
         }
-        @media (max-width: 768px) {
-            body {
-                padding: 10px;
-            }
-            .search-panel {
-                grid-template-columns: 1fr 1fr;
-                padding: 16px;
-                gap: 14px;
-            }
-            .search-panel .form-group:last-child {
-                grid-column: 1 / -1;
-            }
-            th, td {
-                padding: 10px 12px;
-                font-size: 0.82rem;
-            }
-            .logo-wrapper svg {
-                width: 42px;
-                height: 42px;
-            }
+
+        thead {
+            background: var(--bg);
         }
-        @media (max-width: 480px) {
-            .search-panel {
-                grid-template-columns: 1fr;
-            }
-            .radio-group {
-                gap: 8px;
-            }
-            .stats {
-                grid-template-columns: 1fr 1fr 1fr;
-            }
-            .stat-card {
-                padding: 12px 8px;
-            }
-            .actions {
-                justify-content: stretch;
-            }
-            .actions .btn {
-                width: 100%;
-            }
+
+        th {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: var(--text-secondary);
+            border-bottom: 2px solid var(--border);
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        tbody tr:hover {
+            background: rgba(15, 98, 254, 0.03);
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-state svg {
+            width: 64px;
+            height: 64px;
+            margin-bottom: 1rem;
+            opacity: 0.4;
+        }
+
+        .actions {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.7rem 1.25rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(15, 98, 254, 0.3);
+        }
+
+        .btn-primary:disabled {
+            background: #a8a8a8;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-secondary {
+            background: var(--bg);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border);
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--text);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        @media (max-width: 600px) {
+            main { padding: 1rem; }
+            .card { padding: 1rem; }
+            .stats { grid-template-columns: repeat(3, 1fr); gap: 0.5rem; }
+            .stat-item { padding: 0.75rem 0.5rem; }
+            .stat-value { font-size: 1.25rem; }
+            h1 { font-size: 1.25rem; }
+            th, td { padding: 0.5rem 0.75rem; font-size: 0.85rem; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <div class="logo-wrapper">
-                <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Logo Contactos CU">
-                    <defs>
-                        <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" stop-color="#007bff"/>
-                            <stop offset="100%" stop-color="#003d80"/>
-                        </linearGradient>
-                    </defs>
-                    <circle cx="60" cy="60" r="56" fill="url(#g1)"/>
-                    <path d="M38 30 C38 26 42 22 46 22 L74 22 C78 22 82 26 82 30 L82 90 C82 94 78 98 74 98 L46 98 C42 98 38 94 38 90 Z" fill="#fff" opacity="0.95"/>
-                    <rect x="50" y="28" width="20" height="3" rx="1.5" fill="#0056b3"/>
-                    <circle cx="60" cy="88" r="5" fill="#0056b3"/>
-                    <path d="M48 45 Q60 38 72 45" stroke="#0056b3" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-                    <path d="M44 52 Q60 42 76 52" stroke="#0056b3" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.6"/>
-                    <path d="M40 59 Q60 46 80 59" stroke="#0056b3" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.35"/>
-                    <circle cx="60" cy="68" r="3" fill="#00c853"/>
+    <header>
+        <div class="logo" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56a.977.977 0 0 0-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z"/>
+            </svg>
+        </div>
+        <div>
+            <h1>KUB-CALL</h1>
+            <p class="subtitle">Datos Telefónicos de ETECSA</p>
+        </div>
+    </header>
+
+    <main>
+        <section class="card">
+            <h2 class="card-title">Filtros de búsqueda</h2>
+            <div class="filters">
+                <div class="filter-group">
+                    <label for="cant">Cantidad</label>
+                    <input type="number" id="cant" min="1" max="10000" value="1" placeholder="Cantidad">
+                </div>
+                <div class="filter-group">
+                    <label for="tipo">Tipo</label>
+                    <select id="tipo">
+                        <option value="Mixto">Mixto</option>
+                        <option value="Móvil">Móvil</option>
+                        <option value="Fijo">Fijo</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="edad">Rango de Edad</label>
+                    <select id="edad">
+                        <option value="Todos">Todos (18-90)</option>
+                        <option value="Joven">Joven (18-35)</option>
+                        <option value="Adulto">Adulto (36-65)</option>
+                        <option value="Mayor">Mayor (66-90)</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="provincia">Provincia</label>
+                    <select id="provincia">
+                        <option value="">Todas</option>
+                        <option value="Pinar del Río">Pinar del Río</option>
+                        <option value="Artemisa">Artemisa</option>
+                        <option value="La Habana">La Habana</option>
+                        <option value="Mayabeque">Mayabeque</option>
+                        <option value="Matanzas">Matanzas</option>
+                        <option value="Villa Clara">Villa Clara</option>
+                        <option value="Cienfuegos">Cienfuegos</option>
+                        <option value="Sancti Spíritus">Sancti Spíritus</option>
+                        <option value="Ciego de Ávila">Ciego de Ávila</option>
+                        <option value="Camagüey">Camagüey</option>
+                        <option value="Las Tunas">Las Tunas</option>
+                        <option value="Holguín">Holguín</option>
+                        <option value="Granma">Granma</option>
+                        <option value="Santiago de Cuba">Santiago de Cuba</option>
+                        <option value="Guantánamo">Guantánamo</option>
+                        <option value="Isla de la Juventud">Isla de la Juventud</option>
+                    </select>
+                </div>
+            </div>
+            <button class="btn btn-primary" id="btnBuscar">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"/>
+                    <path d="m21 21-4.35-4.35"/>
                 </svg>
-                <div>
-                    <h1>Contactos | CU</h1>
-                    <h2>Datos Telefónicos de ETECSA</h2>
+                Buscar
+            </button>
+        </section>
+
+        <section class="card">
+            <h2 class="card-title">Resumen</h2>
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-value" id="statTotal">0</div>
+                    <div class="stat-label">Total</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="statMoviles">0</div>
+                    <div class="stat-label">Móviles</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="statFijos">0</div>
+                    <div class="stat-label">Fijos</div>
                 </div>
             </div>
-        </header>
+        </section>
 
-        <div class="search-panel">
-            <div class="form-group">
-                <label for="cantidad">Cant. Teléfonos</label>
-                <input type="number" id="cantidad" min="1" max="1000" value="10">
+        <section class="card">
+            <h2 class="card-title">Resultados</h2>
+            <div class="table-wrapper">
+                <table id="tablaResultados">
+                    <thead>
+                        <tr>
+                            <th>Nombre Completo</th>
+                            <th>Teléfono</th>
+                            <th>Provincia</th>
+                            <th>Dirección</th>
+                            <th>Edad</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyResultados">
+                        <tr>
+                            <td colspan="5" class="empty-state">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                                </svg>
+                                <p>Realice una búsqueda para mostrar los datos.</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-            <div class="form-group">
-                <label>Tipo</label>
-                <div class="radio-group">
-                    <label><input type="radio" name="tipo" value="Mixto" checked> Mixto</label>
-                    <label><input type="radio" name="tipo" value="Movil"> Móvil</label>
-                    <label><input type="radio" name="tipo" value="Fijo"> Fijo</label>
-                </div>
+            <div style="margin-top: 1.25rem;" class="actions">
+                <button class="btn btn-primary" id="btnDescargarVCF" disabled>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="7 10 12 15 17 10"/>
+                        <line x1="12" y1="15" x2="12" y2="3"/>
+                    </svg>
+                    EXPORTAR
+                </button>
+                <button class="btn btn-secondary" id="btnLimpiar" disabled>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="3 6 5 6 21 6"/>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                    </svg>
+                    VACIAR
+                </button>
             </div>
-            <div class="form-group">
-                <label for="edad">Rango de Edad</label>
-                <select id="edad">
-                    <option value="Todos">Todos (18-90)</option>
-                    <option value="Joven">Joven (18-35)</option>
-                    <option value="Adulto">Adulto (18-65)</option>
-                    <option value="Mayor">Mayor (50-80)</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <button class="btn" id="buscarBtn">Buscar</button>
-            </div>
-        </div>
+        </section>
+    </main>
 
-        <div class="stats">
-            <div class="stat-card">
-                <h3>Total</h3>
-                <p id="statTotal">0</p>
-            </div>
-            <div class="stat-card">
-                <h3>Móviles</h3>
-                <p id="statMoviles">0</p>
-            </div>
-            <div class="stat-card">
-                <h3>Fijos</h3>
-                <p id="statFijos">0</p>
-            </div>
-        </div>
-
-        <div class="table-container">
-            <table id="dataTable">
-                <thead>
-                    <tr>
-                        <th>Nombre Completo</th>
-                        <th>Teléfono</th>
-                        <th>Provincia</th>
-                        <th>Dirección</th>
-                        <th>Edad</th>
-                    </tr>
-                </thead>
-                <tbody id="tableBody">
-                    <tr>
-                        <td colspan="5" class="empty-state">Realice una búsqueda para mostrar los datos.</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div class="actions">
-            <button class="btn btn-success" id="descargarBtn">Descargar</button>
-        </div>
-    </div>
+    <div class="toast" id="toast"></div>
 
     <script>
-        const provincias = [
-            { nombre: "Pinar del Río", codigo: "48" },
-            { nombre: "Artemisa", codigo: "47" },
-            { nombre: "La Habana", codigo: "7" },
-            { nombre: "Mayabeque", codigo: "47" },
-            { nombre: "Matanzas", codigo: "45" },
-            { nombre: "Villa Clara", codigo: "42" },
-            { nombre: "Cienfuegos", codigo: "43" },
-            { nombre: "Sancti Spíritus", codigo: "41" },
-            { nombre: "Ciego de Ávila", codigo: "33" },
-            { nombre: "Camagüey", codigo: "32" },
-            { nombre: "Las Tunas", codigo: "31" },
-            { nombre: "Holguín", codigo: "24" },
-            { nombre: "Granma", codigo: "23" },
-            { nombre: "Santiago de Cuba", codigo: "22" },
-            { nombre: "Guantánamo", codigo: "21" },
-            { nombre: "Isla de la Juventud", codigo: "46" }
-        ];
+        // ========== PWA: MANIFEST DINÁMICO ==========
+        (function() {
+            const manifestData = {
+                name: "KUB-CALL",
+                short_name: "KUB-CALL",
+                description: "Directorio de contactos CU - ETECSA",
+                start_url: "/contactos/",
+                scope: "/contactos/",
+                display: "standalone",
+                background_color: "#f4f4f4",
+                theme_color: "#0f62fe",
+                orientation: "any",
+                icons: [
+                    {
+                        src: "data:image/svg+xml;base64," + btoa('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192"><rect width="192" height="192" rx="32" fill="#0f62fe"/><text x="96" y="135" font-size="100" text-anchor="middle" fill="white" font-family="Arial" font-weight="bold">KC</text></svg>'),
+                        sizes: "192x192",
+                        type: "image/svg+xml",
+                        purpose: "any maskable"
+                    },
+                    {
+                        src: "data:image/svg+xml;base64," + btoa('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="80" fill="#0f62fe"/><text x="256" y="360" font-size="280" text-anchor="middle" fill="white" font-family="Arial" font-weight="bold">KC</text></svg>'),
+                        sizes: "512x512",
+                        type: "image/svg+xml",
+                        purpose: "any maskable"
+                    }
+                ]
+            };
+            const blob = new Blob([JSON.stringify(manifestData)], { type: 'application/manifest+json' });
+            const manifestURL = URL.createObjectURL(blob);
+            document.getElementById('manifest-link').href = manifestURL;
+        })();
 
-        const nombres = [
-            "Yosvani","Yadiel","Yuniel","Raidel","Dariel","Yasiel","Lázaro","Osvaldo",
-            "Yoenis","Ariel","Michel","Javier","Luis","Pedro","Juan","Carlos","Mario",
-            "Rafael","Roberto","Eduardo","Manuel","Omar","José","Miguel","Daniel","David",
-            "Marcos","Adrián","Leo","Andy","Aroldis","Yordan","Yasmani","Alexander","Ernesto",
-            "Odalys","Yamila","Yanet","Yadira","Yurisbel","Yusnabi","Yusimi","Yailin","Dailenis",
-            "Yaima","Yenifer","Yudith","Yuriana","Yanara","Yisel","Yamile","Yamilka"
-        ];
+        // ========== PWA: SERVICE WORKER INLINE ==========
+        if ('serviceWorker' in navigator) {
+            const swCode = `
+                const CACHE_NAME = 'kub-call-v1';
+                const OFFLINE_URL = '/contactos/';
 
-        const apellidos = [
-            "Rodríguez","Pérez","González","Hernández","García","Martínez","Díaz","Fernández",
-            "López","Sánchez","Ramírez","Torres","Flores","Rivera","Gómez","Alonso","Romero",
-            "Herrera","Medina","Ruiz","Vargas","Castro","Silva","Ortega","Delgado","Cruz",
-            "Núñez","Aguilar","Reyes","Morales","Ortiz","Gutiérrez","Chávez","Ramos","Mendoza",
-            "Jiménez","Moreno","Vega","Molina","Cabrera","Cervantes","Bermúdez","Castañeda","Peña"
-        ];
+                self.addEventListener('install', (event) => {
+                    event.waitUntil(
+                        caches.open(CACHE_NAME).then((cache) => cache.addAll([OFFLINE_URL]))
+                    );
+                    self.skipWaiting();
+                });
 
-        const calles = [
-            "Calle 23","Avenida 41","Calle Obispo","Calle San Lázaro","Avenida de los Presidentes",
-            "Calle G","Calle 10","Avenida 26","Calle 100","Avenida Boyeros","Calle Neptuno",
-            "Calle Reina","Calle Monte","Avenida Independencia","Calle 5ta","Calle 70","Calle 42",
-            "Calle 36","Avenida 31","Calle 12","Calle 8","Avenida 51","Calle 14","Calle 18"
-        ];
+                self.addEventListener('activate', (event) => {
+                    event.waitUntil(
+                        caches.keys().then((names) => 
+                            Promise.all(names.filter((name) => name !== CACHE_NAME).map((name) => caches.delete(name)))
+                        )
+                    );
+                    self.clients.claim();
+                });
 
-        let datosGenerados = [];
-
-        function ri(a, b) {
-            return Math.floor(Math.random() * (b - a + 1)) + a;
+                self.addEventListener('fetch', (event) => {
+                    event.respondWith(
+                        caches.match(event.request).then((response) => {
+                            return response || fetch(event.request).catch(() => caches.match(OFFLINE_URL));
+                        })
+                    );
+                });
+            `;
+            const swBlob = new Blob([swCode], { type: 'application/javascript' });
+            const swURL = URL.createObjectURL(swBlob);
+            navigator.serviceWorker.register(swURL).catch(() => {});
         }
 
-        function genName() {
-            return `${nombres[ri(0, nombres.length - 1)]} ${apellidos[ri(0, apellidos.length - 1)]} ${apellidos[ri(0, apellidos.length - 1)]}`;
-        }
+        // ========== LÓGICA DE LA APLICACIÓN ==========
+        const nombres = ["Juan Pérez", "María García", "Carlos Rodríguez", "Ana López", "Luis Martínez", 
+            "Carmen Hernández", "José González", "Laura Díaz", "Pedro Sánchez", "Isabel Ramírez",
+            "Miguel Torres", "Rosa Flores", "Francisco Rivera", "Elena Gómez", "Alberto Vargas",
+            "Teresa Castro", "Ricardo Reyes", "Patricia Moreno", "Fernando Jiménez", "Sofía Álvarez"];
+        const provincias = ["Pinar del Río", "Artemisa", "La Habana", "Mayabeque", "Matanzas", 
+            "Villa Clara", "Cienfuegos", "Sancti Spíritus", "Ciego de Ávila", "Camagüey", 
+            "Las Tunas", "Holguín", "Granma", "Santiago de Cuba", "Guantánamo", "Isla de la Juventud"];
+        const calles = ["Calle 1", "Avenida Principal", "Calle 23", "Calle 10", "Ave. 5ta", 
+            "Calle Obispo", "Calle G", "Ave. de los Presidentes", "Calle 100", "Calle San Lázaro"];
 
-        function genPhone(tipo, prov) {
-            if (tipo === "Movil") {
-                const p = ["51","52","53","54","55","56","58"][ri(0, 6)];
-                return `+53 ${p} ${ri(100, 999)} ${ri(1000, 9999)}`;
-            }
-            const c = prov.codigo;
-            if (c === "7") return `+53 7 ${ri(200, 999)} ${ri(1000, 9999)}`;
-            return `+53 ${c} ${ri(20, 99)} ${ri(10, 99)} ${ri(10, 99)}`;
-        }
+        let datosActuales = [];
 
-        function genAddr(prov) {
-            return `${calles[ri(0, calles.length - 1)]} #${ri(1, 999)} e/ ${calles[ri(0, calles.length - 1)]} y ${calles[ri(0, calles.length - 1)]}, ${prov.nombre}`;
-        }
+        function generarDatosAleatorios(cantidad, tipo, edad, provincia) {
+            const datos = [];
+            let edadMin = 18, edadMax = 90;
+            if (edad === "Joven") { edadMin = 18; edadMax = 35; }
+            else if (edad === "Adulto") { edadMin = 36; edadMax = 65; }
+            else if (edad === "Mayor") { edadMin = 66; edadMax = 90; }
 
-        function ageRange(r) {
-            if (r === "Joven") return [18, 35];
-            if (r === "Adulto") return [18, 65];
-            if (r === "Mayor") return [50, 80];
-            return [18, 90];
-        }
+            for (let i = 0; i < cantidad; i++) {
+                const esMovil = tipo === "Mixto" ? Math.random() > 0.4 : tipo === "Móvil";
+                let telefono = esMovil 
+                    ? "+53 5" + Math.floor(Math.random() * 10000000).toString().padStart(7, '0')
+                    : "+53 7" + Math.floor(Math.random() * 1000000).toString().padStart(6, '0');
+                
+                const prov = provincia || provincias[Math.floor(Math.random() * provincias.length)];
+                const edadGen = Math.floor(Math.random() * (edadMax - edadMin + 1)) + edadMin;
+                const calle = calles[Math.floor(Math.random() * calles.length)];
+                const num = Math.floor(Math.random() * 500) + 1;
+                const entre = calles[Math.floor(Math.random() * calles.length)];
 
-        function generarDatos() {
-            const cant = Math.max(1, Math.min(1000, parseInt(document.getElementById("cantidad").value) || 10));
-            const tipo = document.querySelector('input[name="tipo"]:checked').value;
-            const [mn, mx] = ageRange(document.getElementById("edad").value);
-            datosGenerados = [];
-            let mov = 0, fij = 0;
-
-            for (let i = 0; i < cant; i++) {
-                const prov = provincias[ri(0, provincias.length - 1)];
-                let t = tipo === "Mixto" ? (Math.random() > 0.5 ? "Movil" : "Fijo") : tipo;
-                if (t === "Movil") mov++; else fij++;
-                datosGenerados.push({
-                    nombre: genName(),
-                    telefono: genPhone(t, prov),
-                    provincia: prov.nombre,
-                    direccion: genAddr(prov),
-                    edad: ri(mn, mx)
+                datos.push({
+                    nombre: nombres[Math.floor(Math.random() * nombres.length)] + " " + 
+                            nombres[Math.floor(Math.random() * nombres.length)].split(' ')[1],
+                    telefono: telefono,
+                    provincia: prov,
+                    direccion: calle + " #" + num + " e/ " + entre,
+                    edad: edadGen,
+                    tipo: esMovil ? "Móvil" : "Fijo"
                 });
             }
-
-            document.getElementById("statTotal").textContent = cant;
-            document.getElementById("statMoviles").textContent = mov;
-            document.getElementById("statFijos").textContent = fij;
-            renderTable();
+            return datos;
         }
 
-        function renderTable() {
-            const tb = document.getElementById("tableBody");
-            if (!datosGenerados.length) {
-                tb.innerHTML = '<tr><td colspan="5" class="empty-state">Realice una búsqueda para mostrar los datos.</td></tr>';
+        function mostrarToast(mensaje) {
+            const toast = document.getElementById('toast');
+            toast.textContent = mensaje;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        function renderizarTabla(datos) {
+            const tbody = document.getElementById('tbodyResultados');
+            tbody.innerHTML = '';
+            
+            if (datos.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="empty-state">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                    </svg>
+                    <p>No se encontraron resultados.</p>
+                </td></tr>`;
                 return;
             }
-            tb.innerHTML = datosGenerados.map(d =>
-                `<tr><td>${d.nombre}</td><td>${d.telefono}</td><td>${d.provincia}</td><td>${d.direccion}</td><td>${d.edad}</td></tr>`
-            ).join("");
+
+            datos.forEach(d => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${d.nombre}</td>
+                    <td>${d.telefono}</td>
+                    <td>${d.provincia}</td>
+                    <td>${d.direccion}</td>
+                    <td>${d.edad}</td>
+                `;
+                tbody.appendChild(tr);
+            });
         }
 
-        function descargarCSV() {
-            if (!datosGenerados.length) return;
-            const h = ["Nombre Completo","Teléfono","Provincia","Dirección","Edad"];
-            const csv = [
-                h.join(","),
-                ...datosGenerados.map(d =>
-                    [`"${d.nombre}"`,`"${d.telefono}"`,`"${d.provincia}"`,`"${d.direccion}"`,d.edad].join(",")
-                )
-            ].join("\n");
-            const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), csv], { type: "text/csv;charset=utf-8;" });
-            const a = document.createElement("a");
-            a.href = URL.createObjectURL(blob);
-            a.download = "contactos_etecsa.csv";
-            a.style.display = "none";
+        function actualizarEstadisticas(datos) {
+            document.getElementById('statTotal').textContent = datos.length;
+            document.getElementById('statMoviles').textContent = datos.filter(d => d.tipo === "Móvil").length;
+            document.getElementById('statFijos').textContent = datos.filter(d => d.tipo === "Fijo").length;
+        }
+
+        function limpiarCadena(str) {
+            return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, ' ').trim();
+        }
+
+        // ========== SISTEMA COMPLETO DE EXPORTACIÓN VCF (vCard 3.0) ==========
+        function generarVCF(datos) {
+            let vcfContent = '';
+            const ahora = new Date();
+            const timestamp = ahora.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+
+            datos.forEach(d => {
+                const partesNombre = d.nombre.split(' ');
+                const apellido = partesNombre.length > 1 ? partesNombre.slice(1).join(' ') : '';
+                const primerNombre = partesNombre[0] || '';
+                const telLimpio = d.telefono.replace(/\s+/g, '');
+
+                vcfContent += `BEGIN:VCARD\n`;
+                vcfContent += `VERSION:3.0\n`;
+                vcfContent += `N:${limpiarCadena(apellido)};${limpiarCadena(primerNombre)};;;\n`;
+                vcfContent += `FN:${limpiarCadena(d.nombre)}\n`;
+                vcfContent += `TEL;TYPE=${d.tipo === 'Móvil' ? 'CELL' : 'HOME,VOICE'}:${telLimpio}\n`;
+                vcfContent += `ADR;TYPE=HOME:;;${limpiarCadena(d.direccion)};${limpiarCadena(d.provincia)};;;Cuba\n`;
+                vcfContent += `NOTE:Edad: ${d.edad} | Tipo: ${d.tipo} | ETECSA Cuba\n`;
+                vcfContent += `CATEGORIES:KUB-CALL,ETECSA,Cuba\n`;
+                vcfContent += `REV:${timestamp}\n`;
+                vcfContent += `END:VCARD\n`;
+            });
+
+            return vcfContent;
+        }
+
+        function descargarVCF(datos) {
+            if (datos.length === 0) {
+                mostrarToast('No hay datos para exportar');
+                return;
+            }
+
+            const vcfContent = generarVCF(datos);
+            const blob = new Blob([vcfContent], { type: 'text/vcard;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            const fecha = new Date().toISOString().split('T')[0];
+            a.href = url;
+            a.download = `KUB-CALL_${fecha}_${datos.length}_contactos.vcf`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
-            URL.revokeObjectURL(a.href);
+            URL.revokeObjectURL(url);
+            mostrarToast(`${datos.length} contactos exportados a VCF`);
         }
 
-        document.getElementById("buscarBtn").addEventListener("click", generarDatos);
-        document.getElementById("descargarBtn").addEventListener("click", descargarCSV);
+        // ========== EVENT LISTENERS ==========
+        document.getElementById('btnBuscar').addEventListener('click', () => {
+            const cant = parseInt(document.getElementById('cant').value) || 50;
+            const tipo = document.getElementById('tipo').value;
+            const edad = document.getElementById('edad').value;
+            const provincia = document.getElementById('provincia').value;
+
+            datosActuales = generarDatosAleatorios(cant, tipo, edad, provincia);
+            renderizarTabla(datosActuales);
+            actualizarEstadisticas(datosActuales);
+            document.getElementById('btnDescargarVCF').disabled = false;
+            document.getElementById('btnLimpiar').disabled = false;
+            mostrarToast(`${datosActuales.length} resultados encontrados`);
+        });
+
+        document.getElementById('btnDescargarVCF').addEventListener('click', () => {
+            descargarVCF(datosActuales);
+        });
+
+        document.getElementById('btnLimpiar').addEventListener('click', () => {
+            datosActuales = [];
+            document.getElementById('tbodyResultados').innerHTML = `<tr><td colspan="5" class="empty-state">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                </svg>
+                <p>Realice una búsqueda para mostrar los datos.</p>
+            </td></tr>`;
+            actualizarEstadisticas([]);
+            document.getElementById('btnDescargarVCF').disabled = true;
+            document.getElementById('btnLimpiar').disabled = true;
+            mostrarToast('Resultados limpiados');
+        });
+
+        // ========== ATAJOS DE TECLADO ==========
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && document.activeElement.tagName !== 'BUTTON') {
+                document.getElementById('btnBuscar').click();
+            }
+            if (e.ctrlKey && e.key === 's') {
+                e.preventDefault();
+                if (datosActuales.length > 0) {
+                    descargarVCF(datosActuales);
+                }
+            }
+        });
     </script>
 </body>
 </html>
