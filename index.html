@@ -2,680 +2,427 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#0f62fe">
-    <meta name="description" content="KUB-CALL - Directorio de contactos CU">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="KUB-CALL">
-    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
     <title>KUB-CALL</title>
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230f62fe'/><text x='50' y='75' font-size='70' text-anchor='middle' fill='white' font-family='Arial' font-weight='bold'>KC</text></svg>">
-    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230f62fe'/><text x='50' y='75' font-size='70' text-anchor='middle' fill='white' font-family='Arial' font-weight='bold'>KC</text></svg>">
     <link rel="manifest" id="manifest-link">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%231a73e8'/%3E%3Cpath d='M24 16c-1.1 0-2 .9-2 2v28c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V18c0-1.1-.9-2-2-2H24zm2 4h12v20H26V20zm0 24h12v2H26v-2z' fill='%23fff'/%3E%3Ccircle cx='32' cy='46' r='2' fill='%23fff'/%3E%3C/svg%3E">
     <style>
-        :root {
-            --primary: #0f62fe;
-            --primary-dark: #0043ce;
-            --bg: #f4f4f4;
-            --surface: #ffffff;
-            --text: #161616;
-            --text-secondary: #525252;
-            --border: #e0e0e0;
-            --shadow: 0 2px 6px rgba(0,0,0,0.1);
-            --radius: 8px;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
+        /* Minimalista 2D, compacto */
+        * { margin:0; padding:0; box-sizing:border-box; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
+            background:#f2f4f8;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            min-height:100vh;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            padding:1rem;
+            color:#1e293b;
         }
-
-        header {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: white;
-            padding: 1rem 1.5rem;
-            box-shadow: var(--shadow);
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
+        .app {
+            max-width:600px;
+            width:100%;
+            background:#fff;
+            border:1px solid #e2e8f0;
+            padding:1.5rem 1.2rem;
+            box-shadow:0 2px 6px rgba(0,0,0,0.02);
         }
-
+        /* Encabezado con logo */
+        .header {
+            display:flex;
+            align-items:center;
+            gap:0.6rem;
+            margin-bottom:1.2rem;
+            border-bottom:1px solid #eef2f6;
+            padding-bottom:0.6rem;
+        }
         .logo {
-            width: 48px;
-            height: 48px;
-            background: white;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            color: var(--primary);
-            font-size: 1.5rem;
-            flex-shrink: 0;
+            width:40px;
+            height:40px;
+            flex-shrink:0;
+        }
+        .header h1 {
+            font-size:1.5rem;
+            font-weight:600;
+            letter-spacing:-0.3px;
+            color:#0b1f33;
+        }
+        .header h1 span { color:#1a73e8; }
+        .header small {
+            font-size:0.7rem;
+            color:#5e6f88;
+            margin-left:auto;
+            background:#eef2f6;
+            padding:0.15rem 0.6rem;
+            border-radius:20px;
         }
 
-        .logo svg {
-            width: 32px;
-            height: 32px;
+        /* Controles en grid compacto */
+        .controls {
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:0.6rem 1rem;
+            margin:0.8rem 0 1rem 0;
         }
-
-        h1 {
-            font-size: 1.5rem;
-            font-weight: 600;
+        .ctrl { display:flex; flex-direction:column; gap:0.15rem; }
+        .ctrl.full { grid-column:1/-1; }
+        .ctrl label {
+            font-size:0.7rem;
+            font-weight:500;
+            text-transform:uppercase;
+            letter-spacing:0.3px;
+            color:#475569;
         }
-
-        .subtitle {
-            font-size: 0.85rem;
-            opacity: 0.9;
+        .ctrl input {
+            padding:0.4rem 0.6rem;
+            border:1px solid #d1d9e6;
+            background:#fafbfc;
+            font-size:0.95rem;
+            width:100%;
+            border-radius:0;
+            transition:border 0.1s;
+            color:#0b1f33;
         }
-
-        main {
-            flex: 1;
-            padding: 1.5rem;
-            max-width: 1200px;
-            margin: 0 auto;
-            width: 100%;
+        .ctrl input:focus {
+            border-color:#1a73e8;
+            background:#fff;
+            outline:none;
         }
-
-        .card {
-            background: var(--surface);
-            border-radius: var(--radius);
-            padding: 1.5rem;
-            box-shadow: var(--shadow);
-            margin-bottom: 1.5rem;
-        }
-
-        .card-title {
-            font-size: 1rem;
-            font-weight: 600;
-            color: var(--text-secondary);
-            margin-bottom: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .filters {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .filter-group label {
-            display: block;
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            margin-bottom: 0.25rem;
-            font-weight: 500;
-        }
-
-        .filter-group select,
-        .filter-group input {
-            width: 100%;
-            padding: 0.6rem 0.75rem;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            font-size: 0.95rem;
-            background: white;
-            color: var(--text);
-            transition: border-color 0.2s, box-shadow 0.2s;
-        }
-
-        .filter-group select:focus,
-        .filter-group input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(15, 98, 254, 0.15);
-        }
-
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .stat-item {
-            text-align: center;
-            padding: 1rem;
-            background: var(--bg);
-            border-radius: 6px;
-        }
-
-        .stat-value {
-            font-size: 1.75rem;
-            font-weight: 700;
-            color: var(--primary);
-        }
-
-        .stat-label {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .table-wrapper {
-            overflow-x: auto;
-            border-radius: var(--radius);
-            border: 1px solid var(--border);
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.95rem;
-        }
-
-        thead {
-            background: var(--bg);
-        }
-
-        th {
-            padding: 0.75rem 1rem;
-            text-align: left;
-            font-weight: 600;
-            color: var(--text-secondary);
-            border-bottom: 2px solid var(--border);
-            white-space: nowrap;
-        }
-
-        td {
-            padding: 0.75rem 1rem;
-            border-bottom: 1px solid var(--border);
-        }
-
-        tbody tr:hover {
-            background: rgba(15, 98, 254, 0.03);
-        }
-
-        tbody tr:last-child td {
-            border-bottom: none;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 3rem 1rem;
-            color: var(--text-secondary);
-        }
-
-        .empty-state svg {
-            width: 64px;
-            height: 64px;
-            margin-bottom: 1rem;
-            opacity: 0.4;
-        }
-
-        .actions {
-            display: flex;
-            gap: 0.75rem;
-            flex-wrap: wrap;
-        }
+        .ctrl input[type="number"] { -moz-appearance:textfield; }
+        .ctrl input[type="number"]::-webkit-outer-spin-button,
+        .ctrl input[type="number"]::-webkit-inner-spin-button { -webkit-appearance:none; }
 
         .btn {
-            padding: 0.7rem 1.25rem;
-            border: none;
-            border-radius: 6px;
-            font-size: 0.95rem;
-            font-weight: 500;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            transition: all 0.2s;
+            background:#1a73e8;
+            border:none;
+            color:#fff;
+            font-weight:600;
+            font-size:0.9rem;
+            padding:0.55rem 0.8rem;
+            cursor:pointer;
+            transition:background 0.1s;
+            border-radius:0;
+            width:100%;
+            letter-spacing:0.2px;
+        }
+        .btn:hover { background:#1557b0; }
+        .btn:active { background:#0f4590; }
+        .btn-secondary { background:#eef2f6; color:#1e293b; }
+        .btn-secondary:hover { background:#dce3ec; }
+        .btn-success { background:#0b8a4a; }
+        .btn-success:hover { background:#09733d; }
+        .btn:disabled { opacity:0.5; cursor:default; }
+
+        .actions {
+            display:flex;
+            gap:0.6rem;
+            margin:0.8rem 0 1rem 0;
+            flex-wrap:wrap;
+        }
+        .actions .btn { flex:1; min-width:90px; }
+
+        /* Lista de números */
+        .list-header {
+            display:flex;
+            justify-content:space-between;
+            align-items:baseline;
+            margin-top:0.8rem;
+            padding-top:0.6rem;
+            border-top:1px solid #eef2f6;
+            font-size:0.8rem;
+            color:#475569;
+        }
+        .list-header .count { font-weight:600; color:#0b1f33; }
+
+        .number-list {
+            display:flex;
+            flex-wrap:wrap;
+            gap:0.3rem 0.6rem;
+            margin-top:0.6rem;
+            max-height:260px;
+            overflow-y:auto;
+            padding:0.6rem 0.4rem;
+            background:#fafbfc;
+            border:1px solid #e2e8f0;
+            align-items:center;
+        }
+        .number-list .num-item {
+            font-family:'SF Mono', 'Menlo', monospace;
+            font-size:0.8rem;
+            background:#fff;
+            padding:0.1rem 0.5rem;
+            border:1px solid #e2e8f0;
+            color:#1e293b;
+            letter-spacing:0.2px;
+        }
+        .number-list .empty-msg {
+            color:#8a9bb0;
+            font-size:0.85rem;
+            width:100%;
+            text-align:center;
+            padding:1rem 0;
         }
 
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: var(--primary-dark);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(15, 98, 254, 0.3);
-        }
-
-        .btn-primary:disabled {
-            background: #a8a8a8;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        .btn-secondary {
-            background: var(--bg);
-            color: var(--text);
-            border: 1px solid var(--border);
-        }
-
-        .btn-secondary:hover {
-            background: var(--border);
-        }
-
-        .toast {
-            position: fixed;
-            bottom: 2rem;
-            left: 50%;
-            transform: translateX(-50%) translateY(100px);
-            background: var(--text);
-            color: white;
-            padding: 0.75rem 1.5rem;
-            border-radius: 6px;
-            font-size: 0.9rem;
-            opacity: 0;
-            transition: all 0.3s ease;
-            z-index: 1000;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-        }
-
-        .toast.show {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
-        }
-
-        @media (max-width: 600px) {
-            main { padding: 1rem; }
-            .card { padding: 1rem; }
-            .stats { grid-template-columns: repeat(3, 1fr); gap: 0.5rem; }
-            .stat-item { padding: 0.75rem 0.5rem; }
-            .stat-value { font-size: 1.25rem; }
-            h1 { font-size: 1.25rem; }
-            th, td { padding: 0.5rem 0.75rem; font-size: 0.85rem; }
+        /* Responsive */
+        @media (max-width:480px) {
+            .app { padding:1rem 0.8rem; }
+            .controls { grid-template-columns:1fr; gap:0.5rem; }
+            .header h1 { font-size:1.3rem; }
+            .actions { flex-direction:column; }
+            .actions .btn { min-width:auto; }
+            .number-list { max-height:180px; }
         }
     </style>
 </head>
 <body>
-    <header>
-        <div class="logo" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="currentColor">
-                <path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56a.977.977 0 0 0-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z"/>
-            </svg>
+<div class="app">
+    <!-- Header con logo SVG inline -->
+    <div class="header">
+        <svg class="logo" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="64" height="64" rx="12" fill="#1a73e8" />
+            <path d="M20 14c-1.8 0-3.2 1.4-3.2 3.2v29.6c0 1.8 1.4 3.2 3.2 3.2h24c1.8 0 3.2-1.4 3.2-3.2V17.2c0-1.8-1.4-3.2-3.2-3.2H20zm2.4 4.8h19.2v22.4H22.4V18.8zm0 25.6h19.2v2.4H22.4v-2.4z" fill="#fff" />
+            <circle cx="32" cy="48" r="2.4" fill="#fff" />
+        </svg>
+        <h1>KUB<span>-CALL</span></h1>
+        <small>ETECSA</small>
+    </div>
+
+    <!-- Controles -->
+    <div class="controls">
+        <div class="ctrl">
+            <label for="desde">Desde Call</label>
+            <input type="number" id="desde" min="50" max="59" value="50" step="1">
         </div>
-        <div>
-            <h1>KUB-CALL</h1>
-            <p class="subtitle">Datos Telefónicos de ETECSA</p>
+        <div class="ctrl">
+            <label for="hasta">Hasta Call</label>
+            <input type="number" id="hasta" min="50" max="59" value="59" step="1">
         </div>
-    </header>
+        <div class="ctrl full">
+            <label for="cantidad">Cantidades</label>
+            <input type="number" id="cantidad" min="1" max="100000" value="10" step="1">
+        </div>
+        <div class="ctrl full" style="margin-top:0.2rem;">
+            <button class="btn" id="generarBtn">Buscar</button>
+        </div>
+    </div>
 
-    <main>
-        <section class="card">
-            <h2 class="card-title">Filtros de búsqueda</h2>
-            <div class="filters">
-                <div class="filter-group">
-                    <label for="cant">Cantidad</label>
-                    <input type="number" id="cant" min="1" max="10000" value="1" placeholder="Cantidad">
-                </div>
-                <div class="filter-group">
-                    <label for="tipo">Tipo</label>
-                    <select id="tipo">
-                        <option value="Mixto">Mixto</option>
-                        <option value="Móvil">Móvil</option>
-                        <option value="Fijo">Fijo</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label for="edad">Rango de Edad</label>
-                    <select id="edad">
-                        <option value="Todos">Todos (18-90)</option>
-                        <option value="Joven">Joven (18-35)</option>
-                        <option value="Adulto">Adulto (36-65)</option>
-                        <option value="Mayor">Mayor (66-90)</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label for="provincia">Provincia</label>
-                    <select id="provincia">
-                        <option value="">Todas</option>
-                        <option value="Pinar del Río">Pinar del Río</option>
-                        <option value="Artemisa">Artemisa</option>
-                        <option value="La Habana">La Habana</option>
-                        <option value="Mayabeque">Mayabeque</option>
-                        <option value="Matanzas">Matanzas</option>
-                        <option value="Villa Clara">Villa Clara</option>
-                        <option value="Cienfuegos">Cienfuegos</option>
-                        <option value="Sancti Spíritus">Sancti Spíritus</option>
-                        <option value="Ciego de Ávila">Ciego de Ávila</option>
-                        <option value="Camagüey">Camagüey</option>
-                        <option value="Las Tunas">Las Tunas</option>
-                        <option value="Holguín">Holguín</option>
-                        <option value="Granma">Granma</option>
-                        <option value="Santiago de Cuba">Santiago de Cuba</option>
-                        <option value="Guantánamo">Guantánamo</option>
-                        <option value="Isla de la Juventud">Isla de la Juventud</option>
-                    </select>
-                </div>
-            </div>
-            <button class="btn btn-primary" id="btnBuscar">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="11" cy="11" r="8"/>
-                    <path d="m21 21-4.35-4.35"/>
-                </svg>
-                Buscar
-            </button>
-        </section>
+    <!-- Acciones -->
+    <div class="actions">
+        <button class="btn btn-secondary" id="limpiarBtn">Vaciar</button>
+        <button class="btn btn-success" id="exportarBtn">Exportar</button>
+    </div>
 
-        <section class="card">
-            <h2 class="card-title">Resumen</h2>
-            <div class="stats">
-                <div class="stat-item">
-                    <div class="stat-value" id="statTotal">0</div>
-                    <div class="stat-label">Total</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value" id="statMoviles">0</div>
-                    <div class="stat-label">Móviles</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value" id="statFijos">0</div>
-                    <div class="stat-label">Fijos</div>
-                </div>
-            </div>
-        </section>
+    <!-- Lista de números -->
+    <div class="list-header">
+        <span>Números generados</span>
+        <span class="count" id="contador">0</span>
+    </div>
+    <div class="number-list" id="listaNumeros">
+        <div class="empty-msg">Sin números</div>
+    </div>
+</div>
 
-        <section class="card">
-            <h2 class="card-title">Resultados</h2>
-            <div class="table-wrapper">
-                <table id="tablaResultados">
-                    <thead>
-                        <tr>
-                            <th>Nombre Completo</th>
-                            <th>Teléfono</th>
-                            <th>Provincia</th>
-                            <th>Dirección</th>
-                            <th>Edad</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tbodyResultados">
-                        <tr>
-                            <td colspan="5" class="empty-state">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
-                                </svg>
-                                <p>Realice una búsqueda para mostrar los datos.</p>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div style="margin-top: 1.25rem;" class="actions">
-                <button class="btn btn-primary" id="btnDescargarVCF" disabled>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                        <polyline points="7 10 12 15 17 10"/>
-                        <line x1="12" y1="15" x2="12" y2="3"/>
-                    </svg>
-                    EXPORTAR
-                </button>
-                <button class="btn btn-secondary" id="btnLimpiar" disabled>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="3 6 5 6 21 6"/>
-                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-                    </svg>
-                    VACIAR
-                </button>
-            </div>
-        </section>
-    </main>
+<script>
+    (function(){
+        "use strict";
 
-    <div class="toast" id="toast"></div>
+        // DOM
+        const desde = document.getElementById('desde');
+        const hasta = document.getElementById('hasta');
+        const cantidad = document.getElementById('cantidad');
+        const generar = document.getElementById('generarBtn');
+        const limpiar = document.getElementById('limpiarBtn');
+        const exportar = document.getElementById('exportarBtn');
+        const lista = document.getElementById('listaNumeros');
+        const contador = document.getElementById('contador');
 
-    <script>
-        // ========== PWA: MANIFEST DINÁMICO ==========
-        (function() {
-            const manifestData = {
-                name: "KUB-CALL",
-                short_name: "KUB-CALL",
-                description: "Directorio de contactos CU - ETECSA",
-                start_url: "/contactos/",
-                scope: "/contactos/",
-                display: "standalone",
-                background_color: "#f4f4f4",
-                theme_color: "#0f62fe",
-                orientation: "any",
-                icons: [
-                    {
-                        src: "data:image/svg+xml;base64," + btoa('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192"><rect width="192" height="192" rx="32" fill="#0f62fe"/><text x="96" y="135" font-size="100" text-anchor="middle" fill="white" font-family="Arial" font-weight="bold">KC</text></svg>'),
-                        sizes: "192x192",
-                        type: "image/svg+xml",
-                        purpose: "any maskable"
-                    },
-                    {
-                        src: "data:image/svg+xml;base64," + btoa('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="80" fill="#0f62fe"/><text x="256" y="360" font-size="280" text-anchor="middle" fill="white" font-family="Arial" font-weight="bold">KC</text></svg>'),
-                        sizes: "512x512",
-                        type: "image/svg+xml",
-                        purpose: "any maskable"
-                    }
-                ]
-            };
-            const blob = new Blob([JSON.stringify(manifestData)], { type: 'application/manifest+json' });
-            const manifestURL = URL.createObjectURL(blob);
-            document.getElementById('manifest-link').href = manifestURL;
-        })();
+        // Estado (Set de strings "+53 50######")
+        const numeros = new Set();
 
-        // ========== PWA: SERVICE WORKER INLINE ==========
-        if ('serviceWorker' in navigator) {
-            const swCode = `
-                const CACHE_NAME = 'kub-call-v1';
-                const OFFLINE_URL = '/contactos/';
+        // ========== FUNCIONES ==========
 
-                self.addEventListener('install', (event) => {
-                    event.waitUntil(
-                        caches.open(CACHE_NAME).then((cache) => cache.addAll([OFFLINE_URL]))
-                    );
-                    self.skipWaiting();
-                });
-
-                self.addEventListener('activate', (event) => {
-                    event.waitUntil(
-                        caches.keys().then((names) => 
-                            Promise.all(names.filter((name) => name !== CACHE_NAME).map((name) => caches.delete(name)))
-                        )
-                    );
-                    self.clients.claim();
-                });
-
-                self.addEventListener('fetch', (event) => {
-                    event.respondWith(
-                        caches.match(event.request).then((response) => {
-                            return response || fetch(event.request).catch(() => caches.match(OFFLINE_URL));
-                        })
-                    );
-                });
-            `;
-            const swBlob = new Blob([swCode], { type: 'application/javascript' });
-            const swURL = URL.createObjectURL(swBlob);
-            navigator.serviceWorker.register(swURL).catch(() => {});
+        function formatear(prefijo, sufijo) {
+            return '+53 ' + prefijo + sufijo;
         }
 
-        // ========== LÓGICA DE LA APLICACIÓN ==========
-        const nombres = ["Juan Pérez", "María García", "Carlos Rodríguez", "Ana López", "Luis Martínez", 
-            "Carmen Hernández", "José González", "Laura Díaz", "Pedro Sánchez", "Isabel Ramírez",
-            "Miguel Torres", "Rosa Flores", "Francisco Rivera", "Elena Gómez", "Alberto Vargas",
-            "Teresa Castro", "Ricardo Reyes", "Patricia Moreno", "Fernando Jiménez", "Sofía Álvarez"];
-        const provincias = ["Pinar del Río", "Artemisa", "La Habana", "Mayabeque", "Matanzas", 
-            "Villa Clara", "Cienfuegos", "Sancti Spíritus", "Ciego de Ávila", "Camagüey", 
-            "Las Tunas", "Holguín", "Granma", "Santiago de Cuba", "Guantánamo", "Isla de la Juventud"];
-        const calles = ["Calle 1", "Avenida Principal", "Calle 23", "Calle 10", "Ave. 5ta", 
-            "Calle Obispo", "Calle G", "Ave. de los Presidentes", "Calle 100", "Calle San Lázaro"];
+        function sufijoAleatorio() {
+            return String(Math.floor(Math.random() * 1000000)).padStart(6, '0');
+        }
 
-        let datosActuales = [];
-
-        function generarDatosAleatorios(cantidad, tipo, edad, provincia) {
-            const datos = [];
-            let edadMin = 18, edadMax = 90;
-            if (edad === "Joven") { edadMin = 18; edadMax = 35; }
-            else if (edad === "Adulto") { edadMin = 36; edadMax = 65; }
-            else if (edad === "Mayor") { edadMin = 66; edadMax = 90; }
-
-            for (let i = 0; i < cantidad; i++) {
-                const esMovil = tipo === "Mixto" ? Math.random() > 0.4 : tipo === "Móvil";
-                let telefono = esMovil 
-                    ? "+53 5" + Math.floor(Math.random() * 10000000).toString().padStart(7, '0')
-                    : "+53 7" + Math.floor(Math.random() * 1000000).toString().padStart(6, '0');
-                
-                const prov = provincia || provincias[Math.floor(Math.random() * provincias.length)];
-                const edadGen = Math.floor(Math.random() * (edadMax - edadMin + 1)) + edadMin;
-                const calle = calles[Math.floor(Math.random() * calles.length)];
-                const num = Math.floor(Math.random() * 500) + 1;
-                const entre = calles[Math.floor(Math.random() * calles.length)];
-
-                datos.push({
-                    nombre: nombres[Math.floor(Math.random() * nombres.length)] + " " + 
-                            nombres[Math.floor(Math.random() * nombres.length)].split(' ')[1],
-                    telefono: telefono,
-                    provincia: prov,
-                    direccion: calle + " #" + num + " e/ " + entre,
-                    edad: edadGen,
-                    tipo: esMovil ? "Móvil" : "Fijo"
-                });
+        // Genera un número único dentro del rango [desde, hasta]
+        function generarUnico(desdeVal, hastaVal, set) {
+            const maxIntentos = 2000;
+            for (let i = 0; i < maxIntentos; i++) {
+                const p = Math.floor(Math.random() * (hastaVal - desdeVal + 1)) + desdeVal;
+                const s = sufijoAleatorio();
+                const num = formatear(p, s);
+                if (!set.has(num)) return num;
             }
-            return datos;
+            return null;
         }
 
-        function mostrarToast(mensaje) {
-            const toast = document.getElementById('toast');
-            toast.textContent = mensaje;
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 3000);
+        // Generar n números únicos
+        function generarNumeros(cant, desdeVal, hastaVal) {
+            const nuevos = [];
+            const totalEspacio = (hastaVal - desdeVal + 1) * 1000000;
+            if (cant > totalEspacio) {
+                alert('El rango solo permite ' + totalEspacio + ' números únicos.');
+                return [];
+            }
+            const tempSet = new Set(numeros);
+            for (let i = 0; i < cant; i++) {
+                const num = generarUnico(desdeVal, hastaVal, tempSet);
+                if (num === null) {
+                    alert('No se pudo generar más números únicos. Intenta con un rango mayor o menos cantidad.');
+                    break;
+                }
+                tempSet.add(num);
+                nuevos.push(num);
+            }
+            // Actualizar el set principal
+            for (const n of nuevos) numeros.add(n);
+            return nuevos;
         }
 
-        function renderizarTabla(datos) {
-            const tbody = document.getElementById('tbodyResultados');
-            tbody.innerHTML = '';
-            
-            if (datos.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="empty-state">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
-                    </svg>
-                    <p>No se encontraron resultados.</p>
-                </td></tr>`;
+        // Renderizar lista
+        function renderizar() {
+            const arr = Array.from(numeros);
+            if (arr.length === 0) {
+                lista.innerHTML = '<div class="empty-msg">Sin números</div>';
+                contador.textContent = '0';
                 return;
             }
-
-            datos.forEach(d => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td>${d.nombre}</td>
-                    <td>${d.telefono}</td>
-                    <td>${d.provincia}</td>
-                    <td>${d.direccion}</td>
-                    <td>${d.edad}</td>
-                `;
-                tbody.appendChild(tr);
+            // Ordenar: por prefijo y sufijo
+            arr.sort((a,b) => {
+                const x = a.replace('+53 ','').replace(' ','');
+                const y = b.replace('+53 ','').replace(' ','');
+                return x.localeCompare(y);
             });
+            let html = '';
+            for (const num of arr) {
+                html += `<span class="num-item">${num}</span>`;
+            }
+            lista.innerHTML = html;
+            contador.textContent = arr.length;
         }
 
-        function actualizarEstadisticas(datos) {
-            document.getElementById('statTotal').textContent = datos.length;
-            document.getElementById('statMoviles').textContent = datos.filter(d => d.tipo === "Móvil").length;
-            document.getElementById('statFijos').textContent = datos.filter(d => d.tipo === "Fijo").length;
-        }
-
-        function limpiarCadena(str) {
-            return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, ' ').trim();
-        }
-
-        // ========== SISTEMA COMPLETO DE EXPORTACIÓN VCF (vCard 3.0) ==========
-        function generarVCF(datos) {
-            let vcfContent = '';
-            const ahora = new Date();
-            const timestamp = ahora.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
-
-            datos.forEach(d => {
-                const partesNombre = d.nombre.split(' ');
-                const apellido = partesNombre.length > 1 ? partesNombre.slice(1).join(' ') : '';
-                const primerNombre = partesNombre[0] || '';
-                const telLimpio = d.telefono.replace(/\s+/g, '');
-
-                vcfContent += `BEGIN:VCARD\n`;
-                vcfContent += `VERSION:3.0\n`;
-                vcfContent += `N:${limpiarCadena(apellido)};${limpiarCadena(primerNombre)};;;\n`;
-                vcfContent += `FN:${limpiarCadena(d.nombre)}\n`;
-                vcfContent += `TEL;TYPE=${d.tipo === 'Móvil' ? 'CELL' : 'HOME,VOICE'}:${telLimpio}\n`;
-                vcfContent += `ADR;TYPE=HOME:;;${limpiarCadena(d.direccion)};${limpiarCadena(d.provincia)};;;Cuba\n`;
-                vcfContent += `NOTE:Edad: ${d.edad} | Tipo: ${d.tipo} | ETECSA Cuba\n`;
-                vcfContent += `CATEGORIES:KUB-CALL,ETECSA,Cuba\n`;
-                vcfContent += `REV:${timestamp}\n`;
-                vcfContent += `END:VCARD\n`;
-            });
-
-            return vcfContent;
-        }
-
-        function descargarVCF(datos) {
-            if (datos.length === 0) {
-                mostrarToast('No hay datos para exportar');
+        // Exportar VCF
+        function exportarVCF() {
+            if (numeros.size === 0) {
+                alert('No hay números para exportar.');
                 return;
             }
-
-            const vcfContent = generarVCF(datos);
-            const blob = new Blob([vcfContent], { type: 'text/vcard;charset=utf-8' });
+            let vcf = '';
+            let idx = 1;
+            for (const num of numeros) {
+                const tel = num.replace(/\s/g,''); // "+5350XXXXXX"
+                const nom = 'KUB-CALL-' + String(idx).padStart(5,'0');
+                vcf += 'BEGIN:VCARD\nVERSION:3.0\nFN:' + nom + '\nTEL;TYPE=CELL:' + tel + '\nEND:VCARD\n';
+                idx++;
+            }
+            const blob = new Blob([vcf], { type: 'text/vcard;charset=utf-8' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
-            const fecha = new Date().toISOString().split('T')[0];
             a.href = url;
-            a.download = `KUB-CALL_${fecha}_${datos.length}_contactos.vcf`;
+            a.download = 'KUB-CALL_contactos.vcf';
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
-            mostrarToast(`${datos.length} contactos exportados a VCF`);
         }
 
-        // ========== EVENT LISTENERS ==========
-        document.getElementById('btnBuscar').addEventListener('click', () => {
-            const cant = parseInt(document.getElementById('cant').value) || 50;
-            const tipo = document.getElementById('tipo').value;
-            const edad = document.getElementById('edad').value;
-            const provincia = document.getElementById('provincia').value;
+        function limpiarLista() {
+            if (numeros.size === 0) return;
+            numeros.clear();
+            renderizar();
+        }
 
-            datosActuales = generarDatosAleatorios(cant, tipo, edad, provincia);
-            renderizarTabla(datosActuales);
-            actualizarEstadisticas(datosActuales);
-            document.getElementById('btnDescargarVCF').disabled = false;
-            document.getElementById('btnLimpiar').disabled = false;
-            mostrarToast(`${datosActuales.length} resultados encontrados`);
-        });
+        // ========== MANEJADORES ==========
 
-        document.getElementById('btnDescargarVCF').addEventListener('click', () => {
-            descargarVCF(datosActuales);
-        });
+        function handleGenerar() {
+            const d = parseInt(desde.value, 10);
+            const h = parseInt(hasta.value, 10);
+            const c = parseInt(cantidad.value, 10);
 
-        document.getElementById('btnLimpiar').addEventListener('click', () => {
-            datosActuales = [];
-            document.getElementById('tbodyResultados').innerHTML = `<tr><td colspan="5" class="empty-state">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
-                </svg>
-                <p>Realice una búsqueda para mostrar los datos.</p>
-            </td></tr>`;
-            actualizarEstadisticas([]);
-            document.getElementById('btnDescargarVCF').disabled = true;
-            document.getElementById('btnLimpiar').disabled = true;
-            mostrarToast('Resultados limpiados');
-        });
-
-        // ========== ATAJOS DE TECLADO ==========
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' && document.activeElement.tagName !== 'BUTTON') {
-                document.getElementById('btnBuscar').click();
+            if (isNaN(d) || isNaN(h) || isNaN(c)) {
+                alert('Todos los campos deben ser números.');
+                return;
             }
-            if (e.ctrlKey && e.key === 's') {
-                e.preventDefault();
-                if (datosActuales.length > 0) {
-                    descargarVCF(datosActuales);
-                }
+            if (d < 50 || d > 59 || h < 50 || h > 59) {
+                alert('Los prefijos deben estar entre 50 y 59.');
+                return;
             }
+            if (d > h) {
+                alert('El prefijo "desde" no puede ser mayor que "hasta".');
+                return;
+            }
+            if (c < 1 || c > 100000) {
+                alert('La cantidad debe estar entre 1 y 100 000.');
+                return;
+            }
+
+            const nuevos = generarNumeros(c, d, h);
+            if (nuevos.length) renderizar();
+        }
+
+        // ========== EVENTOS ==========
+        generar.addEventListener('click', handleGenerar);
+        limpiar.addEventListener('click', limpiarLista);
+        exportar.addEventListener('click', exportarVCF);
+
+        // Enter en inputs
+        [desde, hasta, cantidad].forEach(inp => {
+            inp.addEventListener('keydown', e => {
+                if (e.key === 'Enter') { e.preventDefault(); generar.click(); }
+            });
         });
-    </script>
+
+        // ========== PWA: MANIFEST + SERVICE WORKER ==========
+        function setupPWA() {
+            // Manifest (blob)
+            const manifest = {
+                name: 'KUB-CALL · Generador móvil',
+                short_name: 'KUB-CALL',
+                start_url: location.href.split('?')[0],
+                display: 'standalone',
+                background_color: '#f2f4f8',
+                theme_color: '#1a73e8',
+                icons: [
+                    { src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='24' fill='%231a73e8'/%3E%3Cpath d='M72 48c-4.8 0-8 3.2-8 8v80c0 4.8 3.2 8 8 8h48c4.8 0 8-3.2 8-8V56c0-4.8-3.2-8-8-8H72zm6 12h36v56H78V60zm0 64h36v6H78v-6z' fill='%23fff'/%3E%3Ccircle cx='96' cy='138' r='6' fill='%23fff'/%3E%3C/svg%3E",
+                      sizes:"192x192", type:"image/svg+xml", purpose:"any maskable" },
+                    { src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='48' fill='%231a73e8'/%3E%3Cpath d='M176 112c-12 0-20 8-20 20v216c0 12 8 20 20 20h160c12 0 20-8 20-20V132c0-12-8-20-20-20H176zm16 24h128v144H192V136zm0 168h128v16H192v-16z' fill='%23fff'/%3E%3Ccircle cx='256' cy='360' r='16' fill='%23fff'/%3E%3C/svg%3E",
+                      sizes:"512x512", type:"image/svg+xml", purpose:"any maskable" }
+                ]
+            };
+            const manifestBlob = new Blob([JSON.stringify(manifest)], {type:'application/json'});
+            const manifestURL = URL.createObjectURL(manifestBlob);
+            document.getElementById('manifest-link').href = manifestURL;
+
+            // Service Worker (blob)
+            if ('serviceWorker' in navigator) {
+                const swCode = `
+                    self.addEventListener('install', e => {
+                        e.waitUntil(
+                            caches.open('kub-call-v1').then(c => c.addAll(['/']))
+                        );
+                    });
+                    self.addEventListener('fetch', e => {
+                        e.respondWith(
+                            caches.match(e.request).then(r => r || fetch(e.request))
+                        );
+                    });
+                `;
+                const swBlob = new Blob([swCode], {type:'application/javascript'});
+                const swURL = URL.createObjectURL(swBlob);
+                navigator.serviceWorker.register(swURL, {scope:'/'})
+                    .catch(() => console.warn('SW no registrado (posiblemente por blob URL)'));
+            }
+        }
+        setupPWA();
+
+        // Render inicial
+        renderizar();
+    })();
+</script>
 </body>
 </html>
