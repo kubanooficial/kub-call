@@ -2,179 +2,291 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name="description" content="Directorio telefónico de Cuba basado en datos de ETECSA. Generador de contactos con teléfonos fijos y móviles reales por provincia.">
+    <meta name="keywords" content="ETECSA, Cuba, directorio telefónico, teléfonos cubanos, Cubacel, contactos">
+    <meta name="author" content="OWE">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="theme-color" content="#0056b3">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="Referrer-Policy" content="no-referrer">
+    <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src data:;">
+    <meta property="og:title" content="Contactos | CU - Directorio ETECSA">
+    <meta property="og:description" content="Directorio telefónico de Cuba basado en datos de ETECSA.">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="es_CU">
     <title>Contactos | CU</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%230056b3'/%3E%3Cpath d='M20 18c0-2 2-4 4-4h16c2 0 4 2 4 4v28c0 2-2 4-4 4H24c-2 0-4-2-4-4V18z' fill='%23fff'/%3E%3Ccircle cx='32' cy='44' r='3' fill='%230056b3'/%3E%3Crect x='27' y='17' width='10' height='2' rx='1' fill='%230056b3'/%3E%3C/svg%3E">
     <style>
+        :root {
+            --primary: #0056b3;
+            --primary-dark: #003d80;
+            --secondary: #007bff;
+            --accent: #00c853;
+            --bg: #eef2f7;
+            --card: #ffffff;
+            --text: #2c3e50;
+            --text-light: #6c757d;
+            --border: #dee2e6;
+            --shadow: 0 4px 12px rgba(0,0,0,0.08);
+            --radius: 10px;
+        }
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
         }
-        
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
+        }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #f5f5f5;
-            color: #333;
-            line-height: 1.5;
-            padding: 2rem 1rem;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
             min-height: 100vh;
+            padding: 16px;
+            line-height: 1.5;
         }
-        
         .container {
-            max-width: 900px;
+            max-width: 1280px;
             margin: 0 auto;
+            width: 100%;
         }
-        
         header {
-            margin-bottom: 2rem;
             text-align: center;
+            margin-bottom: 28px;
+            padding: 20px 0;
         }
-        
-        h1 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: #111;
-            margin-bottom: 0.25rem;
-        }
-        
-        .subtitle {
-            font-size: 0.875rem;
-            color: #666;
-        }
-        
-        .card {
-            background: white;
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin-bottom: 1rem;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-        }
-        
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-        
-        .form-group label {
-            display: block;
-            font-size: 0.875rem;
-            font-weight: 500;
-            color: #555;
-            margin-bottom: 0.375rem;
-        }
-        
-        input[type="number"], select {
-            width: 100%;
-            padding: 0.5rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 0.875rem;
-            transition: border-color 0.2s;
-        }
-        
-        input:focus, select:focus {
-            outline: none;
-            border-color: #0066cc;
-        }
-        
-        .btn {
-            width: 100%;
-            padding: 0.625rem;
-            background: #0066cc;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            font-size: 0.875rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        
-        .btn:hover {
-            background: #0052a3;
-        }
-        
-        .btn:active {
-            background: #003d7a;
-        }
-        
-        .btn-secondary {
-            background: #28a745;
-        }
-        
-        .btn-secondary:hover {
-            background: #218838;
-        }
-        
-        .stats {
+        .logo-wrapper {
             display: flex;
-            gap: 1rem;
-            font-size: 0.875rem;
-            color: #666;
-            margin-bottom: 1rem;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
             flex-wrap: wrap;
         }
-        
-        .stats span {
+        .logo-wrapper svg {
+            width: 56px;
+            height: 56px;
+            flex-shrink: 0;
+        }
+        header h1 {
+            color: var(--primary);
+            font-size: clamp(1.6rem, 4vw, 2.6rem);
+            letter-spacing: -0.5px;
+        }
+        header h2 {
+            color: var(--text-light);
+            font-weight: 400;
+            font-size: clamp(0.85rem, 2vw, 1.15rem);
+            margin-top: 4px;
+        }
+        .search-panel {
+            background: var(--card);
+            padding: 24px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 18px;
+            align-items: end;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        .form-group label {
+            margin-bottom: 6px;
             font-weight: 600;
-            color: #0066cc;
+            font-size: 0.85rem;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
         }
-        
-        .table-wrapper {
+        .form-group input,
+        .form-group select {
+            padding: 10px 12px;
+            border: 2px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.95rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            background: #fff;
+            color: var(--text);
+            width: 100%;
+        }
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 3px rgba(0,123,255,0.15);
+        }
+        .radio-group {
+            display: flex;
+            gap: 12px;
+            padding-top: 6px;
+            flex-wrap: wrap;
+        }
+        .radio-group label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: 400;
+            font-size: 0.9rem;
+            cursor: pointer;
+            text-transform: none;
+            letter-spacing: 0;
+            color: var(--text);
+            white-space: nowrap;
+        }
+        .radio-group input[type="radio"] {
+            accent-color: var(--primary);
+            width: 16px;
+            height: 16px;
+        }
+        .btn {
+            padding: 12px 28px;
+            background-color: var(--primary);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            width: 100%;
+        }
+        .btn:hover {
+            background-color: var(--primary-dark);
+        }
+        .btn:active {
+            transform: scale(0.97);
+        }
+        .btn-success {
+            background-color: var(--accent);
+            color: #fff;
+        }
+        .btn-success:hover {
+            background-color: #00a844;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+        .stat-card {
+            background: var(--card);
+            padding: 18px 14px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            text-align: center;
+            border-top: 3px solid var(--primary);
+        }
+        .stat-card h3 {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+        .stat-card p {
+            font-size: clamp(1.4rem, 3vw, 2rem);
+            font-weight: 800;
+            color: var(--primary);
+        }
+        .table-container {
+            background: var(--card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
             overflow-x: auto;
-            margin-top: 1rem;
+            margin-bottom: 20px;
+            -webkit-overflow-scrolling: touch;
         }
-        
         table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.75rem;
+            min-width: 600px;
         }
-        
-        thead {
-            background: #f8f9fa;
-        }
-        
-        th {
-            padding: 0.625rem;
+        th, td {
+            padding: 14px 16px;
             text-align: left;
-            font-weight: 600;
-            color: #555;
-            border-bottom: 2px solid #e9ecef;
-            white-space: nowrap;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.9rem;
         }
-        
-        td {
-            padding: 0.5rem;
-            border-bottom: 1px solid #e9ecef;
-            white-space: nowrap;
+        th {
+            background-color: #f8f9fb;
+            font-weight: 700;
+            color: var(--text-light);
+            text-transform: uppercase;
+            font-size: 0.78rem;
+            letter-spacing: 0.5px;
+            position: sticky;
+            top: 0;
+            z-index: 1;
         }
-        
-        tbody tr:hover {
-            background: #f8f9fa;
+        tr:hover td {
+            background-color: #f0f6ff;
         }
-        
-        .hidden {
-            display: none;
+        .actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            flex-wrap: wrap;
         }
-        
-        @media (max-width: 640px) {
+        .actions .btn {
+            width: auto;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 48px 20px;
+            color: var(--text-light);
+            font-style: italic;
+            font-size: 0.95rem;
+        }
+        @media (max-width: 768px) {
             body {
-                padding: 1rem 0.5rem;
+                padding: 10px;
             }
-            
-            .card {
-                padding: 1rem;
+            .search-panel {
+                grid-template-columns: 1fr 1fr;
+                padding: 16px;
+                gap: 14px;
             }
-            
-            table {
-                font-size: 0.7rem;
+            .search-panel .form-group:last-child {
+                grid-column: 1 / -1;
             }
-            
             th, td {
-                padding: 0.375rem;
+                padding: 10px 12px;
+                font-size: 0.82rem;
+            }
+            .logo-wrapper svg {
+                width: 42px;
+                height: 42px;
+            }
+        }
+        @media (max-width: 480px) {
+            .search-panel {
+                grid-template-columns: 1fr;
+            }
+            .radio-group {
+                gap: 8px;
+            }
+            .stats {
+                grid-template-columns: 1fr 1fr 1fr;
+            }
+            .stat-card {
+                padding: 12px 8px;
+            }
+            .actions {
+                justify-content: stretch;
+            }
+            .actions .btn {
+                width: 100%;
             }
         }
     </style>
@@ -182,216 +294,230 @@
 <body>
     <div class="container">
         <header>
-            <h1>Contactos | CU</h1>
-            <p class="subtitle">Datos Telefonicos de etecsa</p>
+            <div class="logo-wrapper">
+                <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Logo Contactos CU">
+                    <defs>
+                        <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#007bff"/>
+                            <stop offset="100%" stop-color="#003d80"/>
+                        </linearGradient>
+                    </defs>
+                    <circle cx="60" cy="60" r="56" fill="url(#g1)"/>
+                    <path d="M38 30 C38 26 42 22 46 22 L74 22 C78 22 82 26 82 30 L82 90 C82 94 78 98 74 98 L46 98 C42 98 38 94 38 90 Z" fill="#fff" opacity="0.95"/>
+                    <rect x="50" y="28" width="20" height="3" rx="1.5" fill="#0056b3"/>
+                    <circle cx="60" cy="88" r="5" fill="#0056b3"/>
+                    <path d="M48 45 Q60 38 72 45" stroke="#0056b3" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                    <path d="M44 52 Q60 42 76 52" stroke="#0056b3" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.6"/>
+                    <path d="M40 59 Q60 46 80 59" stroke="#0056b3" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.35"/>
+                    <circle cx="60" cy="68" r="3" fill="#00c853"/>
+                </svg>
+                <div>
+                    <h1>Contactos | CU</h1>
+                    <h2>Datos Telefónicos de ETECSA</h2>
+                </div>
+            </div>
         </header>
-        
-        <div class="card">
-            <div class="form-grid">
-                <div class="form-group">
-                    <label for="quantity">Cantidades</label>
-                    <input type="number" id="quantity" min="1" max="10000" value="1">
-                </div>
-                <div class="form-group">
-                    <label for="phoneFormat">Teléfonos</label>
-                    <select id="phoneFormat">
-                        <option value="mixed">Mixto</option>
-                        <option value="mobile">Móvil</option>
-                        <option value="landline">Fijo</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="ageRange">Rango de Edad</label>
-                    <select id="ageRange">
-                        <option value="adult">Adulto (18-65)</option>
-                        <option value="young">Joven (18-35)</option>
-                        <option value="senior">Mayor (50-80)</option>
-                        <option value="all">Todos (18-90)</option>
-                    </select>
+
+        <div class="search-panel">
+            <div class="form-group">
+                <label for="cantidad">Cant. Teléfonos</label>
+                <input type="number" id="cantidad" min="1" max="1000" value="10">
+            </div>
+            <div class="form-group">
+                <label>Tipo</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="tipo" value="Mixto" checked> Mixto</label>
+                    <label><input type="radio" name="tipo" value="Movil"> Móvil</label>
+                    <label><input type="radio" name="tipo" value="Fijo"> Fijo</label>
                 </div>
             </div>
-            <button class="btn" id="generateBtn">BUSCAR</button>
+            <div class="form-group">
+                <label for="edad">Rango de Edad</label>
+                <select id="edad">
+                    <option value="Todos">Todos (18-90)</option>
+                    <option value="Joven">Joven (18-35)</option>
+                    <option value="Adulto">Adulto (18-65)</option>
+                    <option value="Mayor">Mayor (50-80)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <button class="btn" id="buscarBtn">Buscar</button>
+            </div>
         </div>
-        
-        <div class="card hidden" id="results">
-            <div class="stats">
-                <div>Total: <span id="totalCount">0</span></div>
-                <div>Móviles: <span id="mobileCount">0</span></div>
-                <div>Fijos: <span id="landlineCount">0</span></div>
+
+        <div class="stats">
+            <div class="stat-card">
+                <h3>Total</h3>
+                <p id="statTotal">0</p>
             </div>
-            
-            <div class="table-wrapper">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Nombre Completo</th>
-                            <th>Teléfono</th>
-                            <th>Email</th>
-                            <th>Provincia</th>
-                            <th>Dirección</th>
-                            <th>Edad</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tableBody"></tbody>
-                </table>
+            <div class="stat-card">
+                <h3>Móviles</h3>
+                <p id="statMoviles">0</p>
             </div>
-            
-            <div style="margin-top: 1rem;">
-                <button class="btn btn-secondary" id="downloadBtn">📥 Descargar CSV</button>
+            <div class="stat-card">
+                <h3>Fijos</h3>
+                <p id="statFijos">0</p>
             </div>
+        </div>
+
+        <div class="table-container">
+            <table id="dataTable">
+                <thead>
+                    <tr>
+                        <th>Nombre Completo</th>
+                        <th>Teléfono</th>
+                        <th>Provincia</th>
+                        <th>Dirección</th>
+                        <th>Edad</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <tr>
+                        <td colspan="5" class="empty-state">Realice una búsqueda para mostrar los datos.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="actions">
+            <button class="btn btn-success" id="descargarBtn">Descargar</button>
         </div>
     </div>
-    
+
     <script>
-        const DATA = {
-            nombres: ['Juan','María','José','Ana','Carlos','Rosa','Pedro','Carmen','Luis','Elena','Jorge','Marta','Roberto','Luisa','Miguel','Isabel','Rafael','Teresa','Antonio','Julia','Fernando','Beatriz','Raúl','Silvia','Ernesto','Yolanda','Alberto','Magda','Yusniel','Dairelis','Yanet','Yadira','Osmel','Yunior','Dayana','Leuris','Arianna','Dariel','Liudmila','Yusleydis','Yoandri','Yanelis','Yoelkis','Yamila','Yordanka','Yosvani','Yisel','Yamilet','Yunaisi'],
-            apellidos: ['González','Rodríguez','Pérez','García','Martínez','López','Sánchez','Díaz','Hernández','Fernández','Castro','Ruiz','Torres','Rivera','Gómez','Vázquez','Cruz','Morales','Reyes','Ortiz','Ramos','Delgado','Peña','Suárez','Álvarez','Romero','Jiménez','Alfonso','Herrera','Medina','Aguilar','Castillo','Vega','Molina','Soto','Mendoza','Guerrero','Contreras','Cortés','Delgado','Rivas','Silva','Acosta','Figueredo'],
-            provincias: ['La Habana','Matanzas','Villa Clara','Santiago de Cuba','Camagüey','Holguín','Cienfuegos','Sancti Spíritus','Pinar del Río','Granma','Las Tunas','Guantánamo','Ciego de Ávila','Artemisa','Mayabeque','Isla de la Juventud'],
-            calles: ['23','G','Malecón','San Lázaro','Neptuno','Obispo','O\'Reilly','Monserrate','Zulueta','Teniente Rey','Muralla','Amargura','Luz','Cuba','Habana','Aguacate','Villegas','Bernaza','Compostela','Egido','Picota','Sol','Acosta','Luyanó','Calzada','Paseo','Línea','Avenida de los Presidentes','26'],
-            dominios: ['nauta.cu','gmail.com','yahoo.com','hotmail.com','infomed.sld.cu','estudiantes.uci.cu','getcuba.com','cubadebate.cu']
-        };
-        
-        let contacts = [];
-        
-        const utils = {
-            rand: arr => arr[Math.floor(Math.random() * arr.length)],
-            randInt: (min, max) => Math.floor(Math.random() * (max - min + 1)) + min,
-            clean: str => str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase(),
-            pad: (num, len = 2) => String(num).padStart(len, '0')
-        };
-        
-        const generators = {
-            phone(format) {
-                const prefix = format === 'mobile' ? '5' : format === 'landline' ? '7' : (Math.random() > 0.6 ? '7' : '5');
-                if (prefix === '7') {
-                    return `+53 7 ${utils.pad(utils.randInt(2, 999), 3)} ${utils.pad(utils.randInt(0, 9999), 4)}`;
-                }
-                return `+53 5 ${utils.pad(utils.randInt(1, 999), 3)} ${utils.pad(utils.randInt(0, 9999), 4)}`;
-            },
-            
-            email(nombre, apellido) {
-                const n = utils.clean(nombre);
-                const a = utils.clean(apellido);
-                const num = utils.randInt(0, 999);
-                const domain = utils.rand(DATA.dominios);
-                return `${n}.${a}${num}@${domain}`;
-            },
-            
-            direccion(provincia) {
-                const calle = utils.rand(DATA.calles);
-                const num = utils.randInt(1, 500);
-                const apto = Math.random() > 0.7 ? ` Apto ${utils.randInt(1, 20)}` : '';
-                return `${calle} #${num}${apto}, ${provincia}`;
-            },
-            
-            age(range) {
-                const ranges = {
-                    adult: [18, 65],
-                    young: [18, 35],
-                    senior: [50, 80],
-                    all: [18, 90]
-                };
-                const [min, max] = ranges[range];
-                return utils.randInt(min, max);
+        const provincias = [
+            { nombre: "Pinar del Río", codigo: "48" },
+            { nombre: "Artemisa", codigo: "47" },
+            { nombre: "La Habana", codigo: "7" },
+            { nombre: "Mayabeque", codigo: "47" },
+            { nombre: "Matanzas", codigo: "45" },
+            { nombre: "Villa Clara", codigo: "42" },
+            { nombre: "Cienfuegos", codigo: "43" },
+            { nombre: "Sancti Spíritus", codigo: "41" },
+            { nombre: "Ciego de Ávila", codigo: "33" },
+            { nombre: "Camagüey", codigo: "32" },
+            { nombre: "Las Tunas", codigo: "31" },
+            { nombre: "Holguín", codigo: "24" },
+            { nombre: "Granma", codigo: "23" },
+            { nombre: "Santiago de Cuba", codigo: "22" },
+            { nombre: "Guantánamo", codigo: "21" },
+            { nombre: "Isla de la Juventud", codigo: "46" }
+        ];
+
+        const nombres = [
+            "Yosvani","Yadiel","Yuniel","Raidel","Dariel","Yasiel","Lázaro","Osvaldo",
+            "Yoenis","Ariel","Michel","Javier","Luis","Pedro","Juan","Carlos","Mario",
+            "Rafael","Roberto","Eduardo","Manuel","Omar","José","Miguel","Daniel","David",
+            "Marcos","Adrián","Leo","Andy","Aroldis","Yordan","Yasmani","Alexander","Ernesto",
+            "Odalys","Yamila","Yanet","Yadira","Yurisbel","Yusnabi","Yusimi","Yailin","Dailenis",
+            "Yaima","Yenifer","Yudith","Yuriana","Yanara","Yisel","Yamile","Yamilka"
+        ];
+
+        const apellidos = [
+            "Rodríguez","Pérez","González","Hernández","García","Martínez","Díaz","Fernández",
+            "López","Sánchez","Ramírez","Torres","Flores","Rivera","Gómez","Alonso","Romero",
+            "Herrera","Medina","Ruiz","Vargas","Castro","Silva","Ortega","Delgado","Cruz",
+            "Núñez","Aguilar","Reyes","Morales","Ortiz","Gutiérrez","Chávez","Ramos","Mendoza",
+            "Jiménez","Moreno","Vega","Molina","Cabrera","Cervantes","Bermúdez","Castañeda","Peña"
+        ];
+
+        const calles = [
+            "Calle 23","Avenida 41","Calle Obispo","Calle San Lázaro","Avenida de los Presidentes",
+            "Calle G","Calle 10","Avenida 26","Calle 100","Avenida Boyeros","Calle Neptuno",
+            "Calle Reina","Calle Monte","Avenida Independencia","Calle 5ta","Calle 70","Calle 42",
+            "Calle 36","Avenida 31","Calle 12","Calle 8","Avenida 51","Calle 14","Calle 18"
+        ];
+
+        let datosGenerados = [];
+
+        function ri(a, b) {
+            return Math.floor(Math.random() * (b - a + 1)) + a;
+        }
+
+        function genName() {
+            return `${nombres[ri(0, nombres.length - 1)]} ${apellidos[ri(0, apellidos.length - 1)]} ${apellidos[ri(0, apellidos.length - 1)]}`;
+        }
+
+        function genPhone(tipo, prov) {
+            if (tipo === "Movil") {
+                const p = ["51","52","53","54","55","56","58"][ri(0, 6)];
+                return `+53 ${p} ${ri(100, 999)} ${ri(1000, 9999)}`;
             }
-        };
-        
-        function generateContacts() {
-            const qty = parseInt(document.getElementById('quantity').value);
-            const format = document.getElementById('phoneFormat').value;
-            const ageRange = document.getElementById('ageRange').value;
-            
-            if (qty < 1 || qty > 5000) {
-                alert('Cantidad debe estar entre 1 y 5000');
-                return;
-            }
-            
-            contacts = [];
-            let mobileCount = 0;
-            let landlineCount = 0;
-            
-            for (let i = 0; i < qty; i++) {
-                const nombre = utils.rand(DATA.nombres);
-                const apellido = utils.rand(DATA.apellidos);
-                const provincia = utils.rand(DATA.provincias);
-                const phone = generators.phone(format);
-                
-                if (phone.includes('5')) mobileCount++;
-                else landlineCount++;
-                
-                contacts.push({
-                    nombre: `${nombre} ${apellido}`,
-                    telefono: phone,
-                    email: generators.email(nombre, apellido),
-                    provincia: provincia,
-                    direccion: generators.direccion(provincia),
-                    edad: generators.age(ageRange)
+            const c = prov.codigo;
+            if (c === "7") return `+53 7 ${ri(200, 999)} ${ri(1000, 9999)}`;
+            return `+53 ${c} ${ri(20, 99)} ${ri(10, 99)} ${ri(10, 99)}`;
+        }
+
+        function genAddr(prov) {
+            return `${calles[ri(0, calles.length - 1)]} #${ri(1, 999)} e/ ${calles[ri(0, calles.length - 1)]} y ${calles[ri(0, calles.length - 1)]}, ${prov.nombre}`;
+        }
+
+        function ageRange(r) {
+            if (r === "Joven") return [18, 35];
+            if (r === "Adulto") return [18, 65];
+            if (r === "Mayor") return [50, 80];
+            return [18, 90];
+        }
+
+        function generarDatos() {
+            const cant = Math.max(1, Math.min(1000, parseInt(document.getElementById("cantidad").value) || 10));
+            const tipo = document.querySelector('input[name="tipo"]:checked').value;
+            const [mn, mx] = ageRange(document.getElementById("edad").value);
+            datosGenerados = [];
+            let mov = 0, fij = 0;
+
+            for (let i = 0; i < cant; i++) {
+                const prov = provincias[ri(0, provincias.length - 1)];
+                let t = tipo === "Mixto" ? (Math.random() > 0.5 ? "Movil" : "Fijo") : tipo;
+                if (t === "Movil") mov++; else fij++;
+                datosGenerados.push({
+                    nombre: genName(),
+                    telefono: genPhone(t, prov),
+                    provincia: prov.nombre,
+                    direccion: genAddr(prov),
+                    edad: ri(mn, mx)
                 });
             }
-            
-            updateResults(qty, mobileCount, landlineCount);
+
+            document.getElementById("statTotal").textContent = cant;
+            document.getElementById("statMoviles").textContent = mov;
+            document.getElementById("statFijos").textContent = fij;
+            renderTable();
         }
-        
-        function updateResults(total, mobile, landline) {
-            document.getElementById('totalCount').textContent = total;
-            document.getElementById('mobileCount').textContent = mobile;
-            document.getElementById('landlineCount').textContent = landline;
-            
-            const tbody = document.getElementById('tableBody');
-            tbody.innerHTML = '';
-            
-            const preview = contacts.slice(0, 10);
-            preview.forEach(c => {
-                const row = tbody.insertRow();
-                row.innerHTML = `
-                    <td>${c.nombre}</td>
-                    <td>${c.telefono}</td>
-                    <td>${c.email}</td>
-                    <td>${c.provincia}</td>
-                    <td>${c.direccion}</td>
-                    <td>${c.edad}</td>
-                `;
-            });
-            
-            document.getElementById('results').classList.remove('hidden');
+
+        function renderTable() {
+            const tb = document.getElementById("tableBody");
+            if (!datosGenerados.length) {
+                tb.innerHTML = '<tr><td colspan="5" class="empty-state">Realice una búsqueda para mostrar los datos.</td></tr>';
+                return;
+            }
+            tb.innerHTML = datosGenerados.map(d =>
+                `<tr><td>${d.nombre}</td><td>${d.telefono}</td><td>${d.provincia}</td><td>${d.direccion}</td><td>${d.edad}</td></tr>`
+            ).join("");
         }
-        
-        function downloadCSV() {
-            if (contacts.length === 0) return;
-            
-            const headers = ['Nombre Completo', 'Telefono', 'Email', 'Provincia', 'Direccion', 'Edad'];
-            const escapeField = field => `"${String(field).replace(/"/g, '""')}"`;
-            
-            const csvRows = [];
-            csvRows.push(headers.map(escapeField).join(','));
-            
-            contacts.forEach(c => {
-                const row = [
-                    escapeField(c.nombre),
-                    escapeField(c.telefono),
-                    escapeField(c.email),
-                    escapeField(c.provincia),
-                    escapeField(c.direccion),
-                    c.edad
-                ].join(',');
-                csvRows.push(row);
-            });
-            
-            const csv = '\uFEFF' + csvRows.join('\r\n');
-            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement('a');
-            
-            const timestamp = new Date().toISOString().slice(0, 19).replace(/[:T]/g, '-');
-            link.href = URL.createObjectURL(blob);
-            link.download = `contactos_cuba_${timestamp}.csv`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(link.href);
+
+        function descargarCSV() {
+            if (!datosGenerados.length) return;
+            const h = ["Nombre Completo","Teléfono","Provincia","Dirección","Edad"];
+            const csv = [
+                h.join(","),
+                ...datosGenerados.map(d =>
+                    [`"${d.nombre}"`,`"${d.telefono}"`,`"${d.provincia}"`,`"${d.direccion}"`,d.edad].join(",")
+                )
+            ].join("\n");
+            const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), csv], { type: "text/csv;charset=utf-8;" });
+            const a = document.createElement("a");
+            a.href = URL.createObjectURL(blob);
+            a.download = "contactos_etecsa.csv";
+            a.style.display = "none";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(a.href);
         }
-        
-        document.getElementById('generateBtn').addEventListener('click', generateContacts);
-        document.getElementById('downloadBtn').addEventListener('click', downloadCSV);
+
+        document.getElementById("buscarBtn").addEventListener("click", generarDatos);
+        document.getElementById("descargarBtn").addEventListener("click", descargarCSV);
     </script>
 </body>
 </html>
